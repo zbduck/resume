@@ -1,0 +1,332 @@
+
+<!-- saved from url=(0052)http://pages.cs.wisc.edu/~loris/cs536/asn/p6/p6.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>CS536 Project 6</title>
+<style>
+.reg { border: 1px solid black}
+.regtable { border: "1px"; border-collapse:collapse>
+</style>
+
+</head>
+
+<body data-new-gr-c-s-check-loaded="14.1018.0" data-gr-ext-installed="">
+
+<link rel="stylesheet" href="./CS536 Project 6_files/jquery-ui.css">
+<script src="./CS536 Project 6_files/jquery.min.js.&#19979;&#36733;"></script>
+<script src="./CS536 Project 6_files/jquery-ui.min.js.&#19979;&#36733;"></script>
+<script>
+jQuery(document).ready(function ($) {
+		console.log("hello!");
+		accor = $( "#starteraccordion" );
+		console.log(accor);
+		accor.accordion({
+			collapsible: true,
+			heightStyle: "content"
+		});
+  });
+</script>
+<h1>Programming Assignment 6</h1>
+
+<h2>
+Due at 11pm on April 29th, 2021
+</h2>
+
+
+<h2 id="Overview">Overview</h2>
+<p>
+For this assignment you will write a code generator that generates
+MIPS assembly code (suitable as input to the Spim interpreter) for
+C-- programs represented as abstract-syntax trees.
+</p>
+
+
+ <!-- space between items -->
+
+
+<h2 id="Specifications">Specifications</h2>
+
+<ul>
+  <li><a href="http://pages.cs.wisc.edu/~loris/cs536/asn/p6/p6.html#generalInfo">General information</a></li>
+  <li><a href="http://pages.cs.wisc.edu/~loris/cs536/asn/p6/p6.html#starting">Getting started</a></li>
+  <li><a href="http://pages.cs.wisc.edu/~loris/cs536/asn/p6/p6.html#spim">Spim</a></li>
+  <li><a href="http://pages.cs.wisc.edu/~loris/cs536/asn/p6/p6.html#codeChanges">Changes to old code</a></li>
+  <li><a href="http://pages.cs.wisc.edu/~loris/cs536/asn/p6/p6.html#semantics">Non-obvious semantic issues</a></li>
+  <li><a href="http://pages.cs.wisc.edu/~loris/cs536/asn/p6/p6.html#suggestions">Suggestions for how to work on this assignment</a></li>
+</ul>
+
+<h3 id="generalInfo">General information</h3>
+<p>
+Similar to the fourth and fifth assignments, the code generator
+will be implemented by writing <tt>codeGen</tt> member functions for
+the various kinds of AST nodes.
+<em>See the online Code Generation notes (as well as lecture notes) for lots of useful details.</em>
+</p>
+
+<p>
+In addition to implementing the code generator, you will also update the
+main program
+so that, if there are no errors (including type errors),
+the code generator is called after the type checker.
+The code generator should write code to
+the file named by the second command-line argument.
+</p>
+<p>Note that your main program should no longer call the unparser,
+nor should it report that the program was parsed successfully.</p>
+
+<p>
+Also note that you are <em>not</em> required to implement code generation for:
+</p><ul>
+  <li><tt>structs</tt> or anything <tt>struct</tt>-related (like dot-accesses)</li>
+  <li>repeat statement</li>
+</ul>
+<p></p>
+
+<h3 id="starting">Getting started</h3>
+<p>
+Start by downloading <a href="http://pages.cs.wisc.edu/~loris/cs536/asn/p6/p6.zip">p6.zip</a>. After unzipping it, you will see
+all the files required for the project.
+</p>
+
+<p>
+Some useful code-generation methods can be found in the file
+<a href="http://pages.cs.wisc.edu/~loris/cs536/asn/p6/files/Codegen.java"><tt>Codegen.java</tt></a>.
+Note that to use the methods and constants defined in that file
+you will need to prefix the names with <tt>Codegen.</tt>;
+for example, you would write:
+<tt>Codegen.genPop(Codegen.T0)</tt> rather than <tt>genPop(T0)</tt>.
+(Alternatively, you could put the declarations of the methods and
+constants in your <tt>ASTnode</tt> class; then you would not need the
+<tt>Codegen</tt> prefix.)
+Also note that a <tt>PrintWriter</tt> <tt>p</tt> is declared as a static
+public field in the <tt>Codegen</tt> class.
+The code-generation methods in <tt>Codegen.java</tt> all write to <tt>PrintWriter</tt>
+<tt>p</tt>, so you should use it when you open the output file
+in your main program (in <tt>P6.java</tt>);
+i.e., you should include:
+</p>
+<dir><pre>Codegen.p = new PrintWriter(args[1]);</pre></dir>
+<p>
+in your main program (or <tt>ASTnode.p</tt> if you put the declarations
+in the <tt>ASTnode</tt> class).
+You should also close that <tt>PrintWriter</tt> at the end of the program:
+</p>
+<dir><pre>Codegen.p.close();</pre></dir>
+
+
+<h3 id="spim">Spim</h3>
+<p>
+The best way to test your MIPS code is using the simulator SPIM (written by
+at-the-time UW-Madison Computer Science Professor
+<a href="http://en.wikipedia.org/wiki/James_Larus">Jim Larus</a>).
+
+The class supports two versions of spim:
+</p><ol class="style1">
+<li>A command line program, called <b>spim</b>
+<br>Accessing spim:
+<ul>
+<li>Installed on the lab computers at <tt>~cs536-1/public/tools/bin/spim</tt>
+</li></ul>
+</li><li>A GUI-driven program, called <b>QtSpim</b>
+<br>Accessing QtSpim:
+<ul>
+<li>Installed on the lab computers at <tt>~cs536-1/public/tools/bin/QtSpim</tt>
+</li><li>Available as a binary package <a href="http://sourceforge.net/projects/spimsimulator/files/">here</a>
+</li><li> An online version of SPIM (we haven't tested it yet) is available at <a href="https://shawnzhong.github.io/JsSpim/">this url</a></li>
+</ul>
+</li></ol>
+Both of these tools use the same backend, but we recommend using QtSpim since it
+is much more of a modern interface. Generally, it should be enough to run
+<p>
+<tt>~cs536-1/public/tools/bin/QtSpim -file &lt;mips_code.s&gt;</tt>
+</p>
+<p>where <tt><i>mips_code.s</i></tt> is the name of your source file (i.e., the one containing your MIPS code).
+</p>
+
+<p>
+And use the interactive help or menus from there. However, if you want more
+guidance on using spim, you can check out this (fairly old)
+<a href="http://www.cs.wisc.edu/~horwitz/spim/spim.pdf">Reference Manual (pdf)</a>.
+Also, check the tutorials page for a screencast on MIPS and SPIM.
+</p>
+
+<p>
+To get the Spim simulator to correctly recognize your <tt>main</tt> function and to exit the program gracefully, there are two things you need to do:</p>
+      <ol class="style1">
+      <li>
+        <p>When generating the function preamble for <tt>main</tt>, add the label "<tt>__start:</tt>"
+      on the line after the label "<tt>main:</tt>" (note that <tt>__start:</tt> contains two underscore characters).</p></li>
+      <li><p>When generating the function exit for <tt>main</tt>, instead of returning using "<tt>jr $ra</tt>", issue a <tt>syscall</tt> to exit  by doing:</p>
+
+<dir><tt>li $v0, 10<br>
+syscall</tt></dir>
+
+<p>(Note that this means that a program that contains a function which calls <tt>main</tt> won't work correctly, which will be ok for the purposes of this project.)</p>
+</li>
+</ol>
+
+<p>
+Here is a link to an example <a href="http://pages.cs.wisc.edu/~loris/cs536/asn/p6/hello.cminusminus">C-- program</a> and
+the corresponding <a href="http://pages.cs.wisc.edu/~loris/cs536/asn/p6/hello.s">MIPS code</a>.
+</p>
+
+
+<h3 id="codeChanges">Changes to old code</h3>
+
+<h4>Required changes:</h4>
+<ol class="style1">
+  <li><p>Add to the name analyzer or type checker (your choice), a check
+       whether the program contains a function named <tt>main</tt>.
+       If there is no such function, print the error message:
+       "No main function".
+       Use 0,0 as the line and character numbers.
+  </p></li>
+  <li><p>Add a new "<tt>offset</tt>" field to the <tt>TSym</tt> class
+      (or to the appropriate subclass(es) of <tt>TSym</tt>).
+       Change the name analyzer to compute offsets for each function's
+       parameters and local variables (i.e., where in the function's
+       Activation Record they will be stored at runtime) and to fill
+       in the new offset field.
+       Note that each scalar variable requires 4 bytes of storage.
+       You may find it helpful to verify that you have made this
+       change correctly by modifying your unparser to print each local
+       variable's offset.
+  </p></li>
+</ol>
+
+<h4>Suggested changes:</h4>
+<ol class="style1">
+  <li><p>Modify the name analyzer to compute and save the total size of the
+       local variables declared in each function (e.g., in a new field of the
+       function name's symbol-table entry).
+       This will be useful when you do code generation for function
+       entry (to set the SP correctly).
+  </p></li>
+  <li><p>Either write a method to compute the total size of the formal
+       parameters declared in a function, or modify the name analyzer to
+       compute and store that value (in the function name's symbol-table
+       entry).  This will also be useful for code generation for
+       function entry.
+  </p></li>
+  <li><p>Change the definition of class <tt>WriteStmtNode</tt> to include a (private)
+       field to hold the type of the expression being written, and change your
+       typecheck method for the <tt>WriteStmtNode</tt> to fill in that field.
+       This will be useful for code generation for the <i>write</i> statement
+       (since you will need to generate different code depending on
+       the type of the expression being output).
+  </p></li>
+</ol>
+
+
+<h3 id="semantics">Non-obvious semantic issues</h3>
+<ol class="style1">
+  <li><p>All parameters should be passed by value.
+  </p></li>
+  <li><p>The <i>and</i> and <i>or</i> operators (<tt>&amp;&amp;</tt> and <tt>||</tt>) are <i>short circuited</i>,
+       just as they are in Java.  That means that their right operands are
+       only evaluated if necessary (for all of the other binary operators,
+       both operands are always evaluated).  If the left operand of "<tt>&amp;&amp;</tt>"
+       evaluates to <i>false</i>, then the right operand is not evaluated
+       (and the value of the whole expression is <i>false</i>);
+       similarly, if the left operand of "<tt>||</tt>" evaluates to <i>true</i>,
+       then the right operand is not evaluated (and the value of the whole
+       expression is <i>true</i>).
+  </p></li>
+  <li><p>In C-- (as in C++ and Java), two string literals are considered
+       equal if they contain the same sequence of characters.
+       So for example, the first two of the following expressions should
+       evaluate to <i>false</i> and the last two should evaluate to
+       <i>true</i>:</p>
+       <dir><tt>"a" == "abc"<br>
+"a" == "A"<br>
+"a" == "a"<br>
+"abc" == "abc"
+</tt></dir>
+  </li>
+  <li><p>Boolean values should be output as 1 for <i>true</i> and 0
+       for <i>false</i> (and that is probably how you should represent
+       them internally as well).
+  </p></li>
+  <li><p>Boolean values should also be input using 1 for <i>true</i> and 0
+       for <i>false</i>.
+  </p></li>
+</ol>
+
+
+<h3 id="suggestions">Suggestions for how to work on this assignment</h3>
+<ol class="style1">
+  <li><p>Modify name analysis or type checking to ensure that a main
+       function is declared.
+  </p></li>
+  <li><p>Modify name analysis so that the code generator can answer
+       the following questions:</p>
+       <ul>
+         <li>Is an Id local or global?</li>
+	 <li>If local, what is its offset in its function's AR?</li>
+	 <li>For each function, how many bytes of storage are needed
+	      for its params, and how many are needed for its locals?</li>
+       </ul>
+  </li>
+
+<li><p>Implement code generation for each of the following features;
+          be sure to test each feature as it is implemented!</p>
+    <ul>
+        <li>global variable declarations, function entry, and function exit
+            (write a test program that just declares some global variables
+             and a main function that does nothing)</li>
+        <li><tt>int</tt> and <tt>bool</tt> literals (just push the
+	     value onto the stack), string literals, and <tt>WriteStmtNode</tt></li>
+	<li><tt>IdNode</tt> (code that pushes the value of the id onto the stack,
+	     and code that pushes the address of the id onto the stack)
+	     and assignments of the form <tt>id=literal</tt> and
+	     <tt>id=id</tt> (test by assigning then writing)</li>
+        <li>expressions other than calls</li>
+	<li>statements other than calls and returns</li>
+	<li>call statements and expressions, return statements
+	     (to implement a function call, you will need a third
+	     code-generation method for the <tt>IdNode</tt> class: one that is
+	     called only for a function name and that generates
+	     a jump-and-link instruction)</li>
+    </ul>
+</li>
+
+</ol>
+
+<h2 id="Handin">Handing in</h2>
+<p> Please read the following handing in instructions carefully.
+You will be needed to submit the entire working folder as a compressed file as given below.<br> <br>
+
+lastname.firstname.lastname.firstname.P6.zip <br>
++---+ deps/ <br>
++---+ ast.java <br>
++---+ cminusminus.cup <br>
++---+ cminusminus.jlex <br>
++---+ Codegen.java <br>
++---+ DuplicateSymException.java <br>
++---+ EmptySymTableException.java <br>
++---+ ErrMsg.java <br>
++---+ Makefile <br>
++---+ P6.java <br>
++---+ TSym.java <br>
++---+ SymTable.java <br>
++---+ Type.java <br>
++---+ lastname.firstname.lastname.firstname.P6.pdf <br>
+ <br>
+<b>Please ensure that you <b>do not</b> include any extra sub-directories.</b>
+
+<b>Do not turn in any <tt>.class</tt> files. If you accidentally turn in (or create) extra files or subdirectories, please remove them from your submission zip file.
+
+</b></p><div style="border-style: solid; border-color: orange"><b>
+
+<h3>Joining a Canvas group with your partner (also required for those who work alone)</h3>
+
+<p>
+To faciliate grading, before you submit the compressed file, please join a Canvas group with your partner (<a href="https://community.canvaslms.com/docs/DOC-10516-421264913">guide</a>) so you can both receive grades for the same submission. Since you're working on P6, please join an empty group whose name is in the form of "<strong>P6-Pair #</strong>" (type "P6" in the search bar). Note that we have created the groups for you so you only need to join an empty one with your partner. If you work alone, please join an empty group as well.
+</p>
+
+</b></div><b>
+
+If you are working in a pair, have only one member submit the program. <b>Include both persons' name as given above. </b> Also, mention the teammate's name as a comment while submitting the assignment on canvas.<p></p>
+
+
+
+</b></body></html>

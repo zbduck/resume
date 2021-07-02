@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)http://pages.cs.wisc.edu/~shivaram/cs537-sp20/p2a.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>CS 537 Introduction to Operating Systems</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="./CS 537 Introduction to Operating Systems_files/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 20px;
+      }
+    </style>
+    <link href="./CS 537 Introduction to Operating Systems_files/bootstrap-responsive.css" rel="stylesheet">
+		<script src="./CS 537 Introduction to Operating Systems_files/MathJax.js.下载" id=""></script>
+
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></sc\
+ript>
+    <![endif]-->
+  <style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+
+  <body data-new-gr-c-s-check-loaded="14.1018.0" data-gr-ext-installed=""><div id="MathJax_Message" style="display: none;"></div>
+
+    <!--div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".na\
+v-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">CS 537 Introduction to Operating Systems</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div-->
+
+    <div class="container">
+
+      <h1 id="cs-537-spring-2020-project-2a-unix-shell">CS 537 Spring 2020, Project 2a: Unix Shell</h1>
+
+<h2 id="clarification-about-execv-and-path-added-on-feb-8"><em>Clarification about execv and path added on Feb 8</em></h2>
+
+<h2 id="administrivia">Administrivia</h2>
+<ul>
+  <li><strong>Due Date</strong> by Feb 14, 2020 at 10:00 PM</li>
+  <li>Questions: We will be using Piazza for all questions.</li>
+  <li>Collaboration: The assignment has to be done by yourself. Copying code (from others) is considered cheating. <a href="http://pages.cs.wisc.edu/~remzi/Classes/537/Spring2018/dontcheat.html">Read this</a> for more info on what is OK and what is not. Please help us all have a good semester by not doing this.</li>
+  <li>This project is to be done on the <a href="https://csl.cs.wisc.edu/services/instructional-facilities">lab machines</a>, so you can learn more about programming in C on a typical UNIX-based platform (Linux).</li>
+  <li>There is a <strong>quiz on Canvas</strong> that will check if you have read the spec closely. Please remember to also take that!</li>
+</ul>
+
+<h2 id="unix-shell">Unix Shell</h2>
+<p>In this project, you’ll build a simple Unix shell. The shell is the heart of
+the command-line interface, and thus is central to the Unix/C programming
+environment. Mastering use of the shell is necessary to become proficient in
+this world; knowing how the shell itself is built is the focus of this
+project.</p>
+
+<p>There are three specific objectives to this assignment:</p>
+
+<ul>
+  <li>To further familiarize yourself with the Linux programming environment.</li>
+  <li>To learn how processes are created, destroyed, and managed.</li>
+  <li>To gain exposure to the necessary functionality in shells.</li>
+</ul>
+
+<h2 id="overview">Overview</h2>
+
+<p>In this assignment, you will implement a <em>command line interpreter (CLI)</em> or,
+as it is more commonly known, a <em>shell</em>. The shell should operate in this
+basic way: when you type in a command (in response to its prompt), the shell
+creates a child process that executes the command you entered and then prompts
+for more user input when it has finished.</p>
+
+<p>The shells you implement will be similar to, but simpler than, the one you run
+every day in Unix. If you don’t know what shell you are running, it’s probably
+<code>bash</code>. One thing you should do on your own time is to learn more about your
+shell, by reading the man pages or other online materials.</p>
+
+<h2 id="program-specifications">Program Specifications</h2>
+
+<h3 id="basic-shell-smash">Basic Shell: <code>smash</code></h3>
+
+<p>Your basic shell, called <code>smash</code> (short for Super Madison Shell, naturally), is
+basically an interactive loop: it repeatedly prints a prompt <code>smash&gt; </code> (note
+the space after the greater-than sign), parses the input, executes the command
+specified on that line of input, and waits for the command to finish. This is
+repeated until the user types <code>exit</code>.  The name of your final executable
+should be <code>smash</code>.</p>
+
+<p>The shell can be invoked with either no arguments or a single argument;
+anything else is an error. Here is the no-argument way:</p>
+
+<pre><code>prompt&gt; ./smash
+smash&gt; 
+</code></pre>
+
+<p>At this point, <code>smash</code> is running, and ready to accept commands. Type away!</p>
+
+<p>The mode above is called <em>interactive</em> mode, and allows the user to type
+commands directly. The shell also supports a <em>batch mode</em>, which instead reads
+input from a batch file and executes commands from therein. Here is how you
+run the shell with a batch file named <code>batch.txt</code>:</p>
+
+<pre><code>prompt&gt; ./smash batch.txt
+</code></pre>
+
+<p>One difference between batch and interactive modes: in interactive mode, a
+prompt is printed (<code>smash&gt; </code>). In batch mode, no prompt should be printed.</p>
+
+<p>You should structure your shell such that it creates a process for each new
+command (the exception are <em>built-in commands</em>, discussed below).  Your basic
+shell should be able to parse a command and run the program corresponding to
+the command.  For example, if the user types <code>ls -la /tmp</code>, your shell should
+run the program <code>/bin/ls</code> with the given arguments <code>-la</code> and <code>/tmp</code> (how does
+the shell know to run <code>/bin/ls</code>? It’s something called the shell <strong>path</strong>;
+more on this below).</p>
+
+<h2 id="structure">Structure</h2>
+
+<h3 id="basic-shell">Basic Shell</h3>
+
+<p>The shell is very simple (conceptually): it runs in a while loop, repeatedly
+asking for input to tell it what command to execute. It then executes that
+command. The loop continues indefinitely, until the user types the built-in
+command <code>exit</code>, at which point it exits. That’s it!</p>
+
+<p>For reading lines of input, you should use <code>getline()</code>. This allows you to
+obtain arbitrarily long input lines with ease. Generally, the shell will be
+run in <em>interactive mode</em>, where the user types a command (one at a time) and
+the shell acts on it. However, your shell will also support <em>batch mode</em>, in
+which the shell is given an input file of commands; in this case, the shell
+should not read user input (from <code>stdin</code>) but rather from this file to get the
+commands to execute.</p>
+
+<p>In either mode, if you hit the end-of-file marker (EOF), you should call
+<code>exit(0)</code> and exit gracefully.</p>
+
+<p>To parse the input line into constituent pieces, you might want to use
+<code>strsep()</code>. Read the man page (carefully) for more details.</p>
+
+<p>To execute commands, look into <code>fork()</code>, <code>exec()</code>, and <code>wait()/waitpid()</code>.
+See the man pages for these functions, and also read the relevant <a href="http://www.ostep.org/cpu-api.pdf">book
+chapter</a> for a brief overview.</p>
+
+<p>You will note that there are a variety of commands in the <code>exec</code> family; for
+this project, you must use <code>execv</code>. You should <strong>not</strong> use the <code>system()</code>
+library function call to run a command.  Remember that if <code>execv()</code> is
+successful, it will not return; if it does return, there was an error (e.g.,
+the command does not exist). The most challenging part is getting the
+arguments correctly specified.</p>
+
+<p><strong>Clarification</strong>: Generally argv[0] for programs is the program name instead of path</p>
+
+<h3 id="paths">Paths</h3>
+
+<p>In our example above, the user typed <code>ls</code> but the shell knew to execute the
+program <code>/bin/ls</code>. How does your shell know this?</p>
+
+<p>It turns out that the user must specify a <strong>path</strong> variable to describe the
+set of directories to search for executables; the set of directories that
+comprise the path are sometimes called the <em>search path</em> of the shell. The
+path variable contains the list of all directories to search, in order, when
+the user types a command.</p>
+
+<p><strong>Important:</strong> Note that the shell itself does not <em>implement</em> <code>ls</code> or other
+commands (except built-ins). All it does is find those executables in one of
+the directories specified by <code>path</code> and create a new process to run them.</p>
+
+<p>To check if a particular file exists in a directory and is executable,
+consider the <code>access()</code> system call. For example, when the user types <code>ls</code>,
+and path is set to include both <code>/usr/bin</code> and <code>/bin</code>(assuming empty path list at first, <code>/bin</code> is added, then <code>/usr/bin</code> is added), try <code>access("/usr/bin/ls",
+X_OK)</code>. If that fails, try <code>/bin/ls</code>. If that fails too, it is an error.</p>
+
+<p>Your initial shell path should contain one directory: <code>/bin</code></p>
+
+<p>Note: Most shells allow you to specify a binary specifically without using a
+search path, using either <strong>absolute paths</strong> or <strong>relative paths</strong>. For
+example, a user could type the <strong>absolute path</strong> <code>/bin/ls</code> and execute the
+<code>ls</code> binary without a search path being needed. A user could also specify a
+<strong>relative path</strong> which starts with the current working directory and
+specifies the executable directly, e.g., <code>./main</code>. In this project, you <strong>do
+not</strong> have to worry about these features.</p>
+
+<h3 id="built-in-commands">Built-in Commands</h3>
+
+<p>Whenever your shell accepts a command, it should check whether the command is
+a <strong>built-in command</strong> or not. If it is, it should not be executed like other
+programs. Instead, your shell will invoke your implementation of the built-in
+command. For example, to implement the <code>exit</code> built-in command, you simply
+call <code>exit(0);</code> in your smash source code, which then will exit the shell.</p>
+
+<p>In this project, you should implement <code>exit</code>, <code>cd</code>, and <code>path</code> as built-in
+commands.</p>
+
+<ul>
+  <li>
+    <p><code>exit</code>: When the user types <code>exit</code>, your shell should simply call the <code>exit</code>
+system call with 0 as a parameter. It is an error to pass any arguments to
+<code>exit</code>.</p>
+  </li>
+  <li>
+    <p><code>cd</code>: <code>cd</code> always take one argument (0 or &gt;1 args should be signaled as an
+error). To change directories, use the <code>chdir()</code> system call with the argument
+supplied by the user; if <code>chdir</code> fails, that is also an error.</p>
+  </li>
+  <li>
+    <p><code>path</code>: The <code>path</code> command takes 1 or more arguments, with each argument
+separated by whitespace from the others. Three options are supported: <code>add</code>,
+<code>remove</code>, and <code>clear</code>. <strong>Clarification</strong>: Invalid arguments should be an error.</p>
+    <ul>
+      <li><code>add</code> accepts 1 path. Your shell should append it to the <em>beginning</em> of the 
+path list. For example, <code>path add /usr/bin</code> results in the path list
+containing <code>/usr/bin</code> and <code>/bin</code>  (notice the order here). Your shell should
+<em>not</em> report an error if an invalid path is added. It should kindly accept it.</li>
+      <li><code>remove</code> accepts 1 path. It searches through the current path list
+and removes the corresponding one. If the path cannot be found, this is
+an error.</li>
+      <li><code>clear</code> takes no additional argument. It simply removes everything from
+the path list. If the user sets path to be empty, then the shell
+should not be able to run any programs (except built-in commands).</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="redirection">Redirection</h3>
+
+<p>Many times, a shell user prefers to send the output of a program to a file
+rather than to the screen. Usually, a shell provides this nice feature with
+the <code>&gt;</code> character. Formally this is named as redirection of standard
+output. To make your shell users happy, your shell should also include this
+feature, but with a slight twist (explained below).</p>
+
+<p>For example, if a user types <code>ls -la /tmp &gt; output</code>, nothing should be printed
+on the screen. Instead, the standard output of the <code>ls</code> program should be
+rerouted to the file <code>output</code>. In addition, the standard error output of
+the program should be rerouted to the file <code>output</code> (the twist is that this
+is a little different than standard redirection). However, if the program
+cannot be found (i.e., mistyped <code>pwd</code> as <code>pdd</code>), an error should be reported,
+but not to be redirected to <code>output</code>.</p>
+
+<p>If the <code>output</code> file exists before you run your program, you should simply
+overwrite it (after truncating it).</p>
+
+<p>The exact format of redirection is a command (and possibly some arguments)
+followed by the redirection symbol followed by a filename. Multiple
+redirection operators or multiple files to the right of the redirection sign
+are errors. Redirection without a command is also not allowed - an error
+should be printed out, instead of being redirected.</p>
+
+<p>Note:</p>
+
+<ul>
+  <li>Don’t worry about redirection for built-in commands (e.g., we will
+<strong>not</strong> test what happens when you type <code>path /bin &gt; file</code>).</li>
+  <li>Don’t worry about the order of <code>stdout</code> and <code>stderr</code>. In other words, if
+a process writes to both, the output could be jumbled up. (This is okay!)</li>
+</ul>
+
+<h3 id="parallel-commands">Parallel Commands</h3>
+
+<p>Your shell will also allow the user to launch parallel commands. This is
+accomplished with the ampersand operator as follows:</p>
+
+<pre><code>smash&gt; cmd1 &amp; cmd2 args1 args2 &amp; cmd3 args1
+</code></pre>
+
+<p>In this case, instead of running <code>cmd1</code> and then waiting for it to finish,
+your shell should run <code>cmd1</code>, <code>cmd2</code>, and <code>cmd3</code> (each with whatever arguments
+the user has passed to it) in parallel, <em>before</em> waiting for any of them to
+complete.</p>
+
+<p>Then, after starting all such processes, you must make sure to use <code>wait()</code>
+(or <code>waitpid</code>) to wait for them to complete. After all processes are done,
+return control to the user as usual (or, if in batch mode, move on to the next
+line).</p>
+
+<p>Note:</p>
+
+<ul>
+  <li>Don’t worry about parallel built-in commands (e.g., we will <strong>not</strong> test
+<code>cd foo &amp; ls -al</code>).</li>
+  <li>Redirection should be supported (e.g., <code>cmd1 &gt; output &amp; cmd 2</code>).</li>
+  <li>Empty commands are allowed (i.e., <code>cmd &amp;</code>, <code>&amp; cmd</code>).</li>
+</ul>
+
+<h3 id="multiple-commands">Multiple Commands</h3>
+
+<p>What if a shell user would like to type in multiple commands in a single line?
+Sometimes, they might turn in a long list of commands, prepare some popcorns
+and, wait until all of them to finish. This is supported by semicolons:</p>
+
+<pre><code>smash&gt; cmd1 &amp; cmd2 args1 args2 ; cmd3 args1
+</code></pre>
+
+<p>Here, your shell runs <code>cmd 1</code> and <code>cmd 2</code> in parallel, like specified above,
+waits until they complete, and executes <code>cmd 3</code> afterwards.</p>
+
+<p>Note:</p>
+
+<ul>
+  <li>Your shell should support multiple built-in commands, such as <code>ls ; cd
+foo ; ls</code></li>
+  <li>Redirection should be supported (e.g., <code>cmd1 &gt; output ; cmd 2</code>).</li>
+  <li>Empty commands are allowed (i.e., <code>cmd ;</code>, <code>; cmd &amp;</code>).</li>
+</ul>
+
+<h3 id="program-errors">Program Errors</h3>
+
+<p><strong>The one and only error message.</strong> You should print this one and only error
+message whenever you encounter an error of any type:</p>
+
+<pre><code>    char error_message[30] = "An error has occurred\n";
+    write(STDERR_FILENO, error_message, strlen(error_message)); 
+</code></pre>
+
+<p>The error message should be printed to stderr (standard error), as shown
+above.</p>
+
+<p>After most errors, your shell simply <em>continue processing</em> after
+printing the one and only error message. However, if the shell is invoked with
+more than one file, or if the shell is passed a file that doesn’t exist, it 
+should exit by calling <code>exit(1)</code>.</p>
+
+<p>There is a difference between errors that your shell catches and those that
+the program catches. Your shell should catch all the syntax errors specified
+in this project page. If the syntax of the command looks perfect, you simply
+run the specified program. If there are any program-related errors (e.g.,
+invalid arguments to <code>ls</code> when you run it, for example), the shell does not
+have to worry about that (rather, the program will print its own error
+messages and exit).</p>
+
+<p>For parallel and multiple commands, syntax errors (e.g., <code>ls; &gt; output</code>)
+or invalid programs names (e.g., a mistyped <code>ls</code>, like <code>lss</code>) should prevent 
+the entire line from executing.</p>
+
+<h3 id="miscellaneous-hints">Miscellaneous Hints</h3>
+
+<p>Remember to get the <strong>basic functionality</strong> of your shell working before
+worrying about all of the error conditions and end cases. For example, first
+get a single command running (probably first a command with no arguments, such
+as <code>ls</code>).</p>
+
+<p>Next, add built-in commands. Then, try working on redirection. Finally, think
+about parallel and multiple commands. Each of these requires a little more 
+effort on parsing, but each should not be too hard to implement. It is
+recommended that you separate the process of parsing and execution - parse
+first, look for syntax errors (if any), and then finally execute the commands.</p>
+
+<p>At some point, you should make sure your code is robust to white space of
+various kinds, including spaces (<code> </code>) and tabs (<code>\t</code>). In general, the user
+should be able to put variable amounts of white space before and after
+commands, arguments, and various operators; however, the operators
+(redirection, parallel commands, and multiple commands) do not require whitespace.
+For example, your shell should accept commands like:</p>
+<pre><code>smash&gt;     ls&amp;    pwd&gt;output     ;cd /usr
+</code></pre>
+
+<p>Check the return codes of all system calls from the very beginning of your
+work. This will often catch errors in how you are invoking these new system
+calls. It’s also just good programming sense.</p>
+
+<p>Beat up your own code! You are the best (and in this case, the only) tester of
+this code. Throw lots of different inputs at it and make sure the shell
+behaves well. Good code comes through testing; you must run many different
+tests to make sure things work as desired. Don’t be gentle – other users
+certainly won’t be.</p>
+
+<p>Finally, keep versions of your code. More advanced programmers will use a
+source control system such as git. Minimally, when you get a piece of
+functionality working, make a copy of your .c file (perhaps a subdirectory
+with a version number, such as v1, v2, etc.). By keeping older, working
+versions around, you can comfortably work on adding new functionality, safe in
+the knowledge you can always go back to an older, working version if need be.</p>
+
+<h3 id="test">Test</h3>
+<p>To test your Unix Shell:</p>
+
+<ol>
+  <li>Navigate to the directory that contains your smash.c.</li>
+  <li>Run the script “runtests” that can be found in /u/c/s/cs537-1/tests/p2a. You may
+copy it to another location if you prefer.</li>
+</ol>
+
+<h3 id="submitting-your-implementation">Submitting Your Implementation</h3>
+
+<p>It is possible to implement the shell in a single <code>.c</code> file, so your handin
+directory <code>~cs537-1/handin/LOGIN/p2a</code> should only contain these two files:</p>
+
+<ul>
+  <li>1 README file named <code>README.md</code></li>
+  <li><code>smash.c</code> that contains your source code</li>
+</ul>
+
+<p>Use the README file for any explanation you feel would be helpful to someone
+trying to understand the structure of your code.</p>
+
+<p>We will compile your code via the <code>gcc</code> compiler with flags <code>-Wall</code> and
+<code>-Werror</code>:</p>
+
+<pre><code>    gcc -Wall -Werror smash.c -o smash
+</code></pre>
+
+<p>And finally remember to do the quiz on Canvas as well!</p>
+
+
+    </div>
+
+  
+
+</body></html>
